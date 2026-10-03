@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LINK TEST NHANH XÁC SUẤT MỨC 1</title>
+    <link rel="icon" href="meo.jpg" type="image/jpg">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        // Nâu ấm (thay slate)
+                        slate: {50:'#fbf7f2',100:'#f4ece3',200:'#e7d9cb',300:'#d3c0ae',400:'#b49d8a',500:'#8c7766',600:'#6b5648',700:'#4e3c33',800:'#38292a',900:'#271b1a',950:'#180f0e'},
+                        // Đỏ gạch / garnet (thay indigo) - màu chủ đạo
+                        indigo: {50:'#fdf1ed',100:'#fbe0d7',200:'#f6c2b2',300:'#ef9d86',400:'#e5755b',500:'#c8452f',600:'#a8321f',700:'#8a2616',800:'#6b1d12',900:'#4a140d',950:'#2e0b07'},
+                        // Đỏ rượu vang (thay purple)
+                        purple: {300:'#e3a3a9',400:'#c96b78',500:'#a8384c',600:'#8c2a3c',700:'#6e1f2f',800:'#511723'},
+                        // Vàng đồng (thay pink) - điểm nhấn
+                        pink: {300:'#f0cd8a',400:'#e2a94d',500:'#c98a2b',600:'#a56d1d'},
+                    },
+                    fontFamily: {
+                        sans: ['"Be Vietnam Pro"', 'system-ui', 'sans-serif'],
+                        display: ['"Playfair Display"', 'Georgia', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- KaTeX CDN for mathematical formulas -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Canvas Confetti CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #180f0e; }
+        ::-webkit-scrollbar-thumb { background: #5a4338; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #a8321f; }
+
+        body {
+            background-color: #180f0e;
+            background-image:
+                radial-gradient(900px 500px at 8% -10%, rgba(168, 50, 31, 0.20), transparent 60%),
+                radial-gradient(800px 500px at 100% 0%, rgba(201, 138, 43, 0.10), transparent 55%),
+                radial-gradient(700px 600px at 50% 110%, rgba(110, 31, 47, 0.18), transparent 60%);
+            background-attachment: fixed;
+        }
+        h1, h2, h3, .font-display { font-family: 'Playfair Display', Georgia, serif; }
+        h2 { letter-spacing: 0.02em; }
+
+        /* Header: viền vàng đồng mảnh bên dưới */
+        header.sticky { position: sticky; background: linear-gradient(180deg, rgba(39,27,26,.96), rgba(24,15,14,.92)) !important; border-bottom: 1px solid rgba(201,138,43,.28) !important; }
+        header.sticky::after { content:''; position:absolute; left:0; right:0; bottom:-1px; height:1px; background: linear-gradient(90deg, transparent, #c98a2b, transparent); opacity:.7; }
+
+        .glass-card {
+            background: linear-gradient(160deg, rgba(56, 41, 42, 0.82), rgba(39, 27, 26, 0.82));
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 169, 77, 0.12);
+            box-shadow: 0 10px 30px -12px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,235,210,.05);
+        }
+        #questionsContainer > .glass-card { position: relative; border-left: 3px solid #a8321f; }
+        #questionsContainer > .glass-card:hover { border-color: rgba(226,169,77,.35); border-left-color: #e2a94d; transform: translateY(-1px); }
+
+        .hero-banner {
+            background:
+                linear-gradient(135deg, rgba(138,38,22,.92) 0%, rgba(110,31,47,.92) 55%, rgba(74,20,13,.95) 100%);
+            border: 1px solid rgba(226,169,77,.35);
+            position: relative; overflow: hidden;
+        }
+        .hero-banner::before {
+            content:''; position:absolute; inset:0;
+            background: repeating-linear-gradient(45deg, rgba(255,235,210,.035) 0 2px, transparent 2px 14px);
+            pointer-events:none;
+        }
+        .hero-banner::after {
+            content:''; position:absolute; right:-60px; top:-60px; width:220px; height:220px; border-radius:50%;
+            background: radial-gradient(circle, rgba(226,169,77,.35), transparent 70%); pointer-events:none;
+        }
+        .hero-chip { background: rgba(24,15,14,.45); border: 1px solid rgba(240,205,138,.25); }
+
+        .math-content .katex { font-size: 1.05em; }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 12px rgba(200, 69, 47, 0.25); }
+            50% { box-shadow: 0 0 24px rgba(226, 169, 77, 0.45); }
+        }
+        .active-timer { animation: pulseGlow 2.4s infinite; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+        .animate-fadeIn { animation: fadeIn .45s ease both; }
+
+        select, input { color-scheme: dark; }
+        button { cursor: pointer; }
+        .ic { width: 1em; height: 1em; display: inline-block; vertical-align: -0.125em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+        .math-content .katex { font-size: 1.1em; }
+        .math-content strong { color: #f0cd8a; font-weight: 700; }
+        @media (min-width: 1024px) {
+            aside.lg\:col-span-4 { position: sticky; top: 5.25rem; align-self: start; max-height: calc(100vh - 6.5rem); overflow-y: auto; padding-right: 4px; }
+        }
+        #questionsContainer > .glass-card { padding-top: 1.5rem; }
+        .opt-btn { min-height: 64px; }
+        .flag-btn { display:inline-flex; align-items:center; gap:.4rem; padding:.35rem .75rem; font-size:11px; font-weight:700; border-radius:.75rem; border:1px solid rgba(226,169,77,.35); color:#e2a94d; background:rgba(201,138,43,.08); transition:all .15s; }
+        .flag-btn:hover { background:rgba(201,138,43,.2); }
+        .flag-btn.on { background:linear-gradient(90deg,#c98a2b,#a8321f); color:#fff; border-color:rgba(240,205,138,.6); box-shadow:0 4px 14px -6px rgba(201,138,43,.7); }
+        .m-flag { position:relative; }
+        .m-flag::after { content:''; position:absolute; top:-3px; right:-3px; width:9px; height:9px; border-radius:50%; background:#e2a94d; border:2px solid #271b1a; }
+        #questionsContainer > .glass-card.is-flagged { border-left-color:#e2a94d; background:linear-gradient(160deg, rgba(201,138,43,.12), rgba(39,27,26,.85)); }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans flex flex-col antialiased selection:bg-indigo-600 selection:text-white">
+
+    <header class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 shadow-xl">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <!-- App Brand Logo -->
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-700 via-indigo-500 to-pink-500 flex items-center justify-center shadow-lg shadow-indigo-900/50 ring-1 ring-pink-300/40">
+                    <svg class="ic text-lg text-white" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 7V4H6l6 8-6 8h12v-3"/></svg>
+                </div>
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <span class="font-display font-extrabold text-base sm:text-xl tracking-tight bg-gradient-to-r from-pink-300 via-indigo-200 to-pink-400 bg-clip-text text-transparent">
+                            Xác Suất THPT
+                        </span>
+                        <span class="px-2 py-0.5 text-[10px] sm:text-xs font-semibold bg-pink-500/15 text-pink-300 rounded-full border border-pink-400/30">GDPT 2018</span>
+                    </div>
+                    <p class="text-[11px] text-slate-400 font-medium hidden sm:block">Hệ thống Luyện đề & Thống kê năng lực (50 Câu)</p>
+                </div>
+            </div>
+
+            <!-- Header Action Controls -->
+            <div class="flex items-center space-x-3">
+                <!-- Exam Timer Display -->
+                <div id="examTimerBox" class="flex items-center space-x-2 bg-slate-800/90 px-3 py-1.5 rounded-xl border border-indigo-500/30 text-indigo-300 font-mono text-xs sm:text-sm font-bold active-timer">
+                    <svg class="ic text-indigo-400" viewBox="0 0 24 24" aria-hidden="true"><line x1="10" x2="14" y1="2" y2="2"/><line x1="12" x2="15" y1="14" y2="11"/><circle cx="12" cy="14" r="8"/></svg>
+                    <span id="timerDisplay">45:00</span>
+                </div>
+
+                <!-- Submit Exam Button -->
+                <button id="submitExamBtn" onclick="submitExam()" class="px-4 py-2 bg-gradient-to-r from-pink-500 to-indigo-600 hover:from-pink-400 hover:to-indigo-500 text-white text-xs sm:text-sm font-bold rounded-xl shadow-lg shadow-indigo-900/40 ring-1 ring-pink-300/30 transition duration-200 flex items-center space-x-2">
+                    <svg class="ic " viewBox="0 0 24 24" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                    <span>NỘP BÀI</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- Left Sidebar (Matrix & Filters) -->
+        <aside class="lg:col-span-4 space-y-6">
+            
+            <!-- Status Card -->
+            <div id="statusInfoCard" class="glass-card p-4 rounded-2xl border-l-4 border-l-indigo-500 relative overflow-hidden">
+                <div class="flex items-start space-x-3">
+                    <div class="p-2 bg-indigo-500/10 rounded-xl text-indigo-400">
+                        <span id="statusIcon" class="text-xl inline-flex"><svg class="ic " viewBox="0 0 24 24" aria-hidden="true"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg></span>
+                    </div>
+                    <div>
+                        <h3 id="statusTitle" class="font-bold text-sm text-slate-100">Đang Làm Bài Thi</h3>
+                        <p id="statusDesc" class="text-xs text-slate-400 mt-1 leading-relaxed">
+                            Chọn đáp án cho các câu hỏi. Kết quả Đúng/Sai và Lời giải chi tiết chỉ hiển thị sau khi nhấn nút <b class="text-pink-300">NỘP BÀI</b>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question Matrix Container -->
+            <div class="glass-card p-5 rounded-2xl space-y-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center space-x-2">
+                        <svg class="ic text-indigo-400" viewBox="0 0 24 24" aria-hidden="true"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+                        <span>Ma Trận Câu Hỏi</span>
+                    </h2>
+                    <span id="progressText" class="text-xs font-bold px-2.5 py-1 bg-indigo-500/10 text-indigo-400 rounded-lg border border-indigo-500/20">
+                        0 / 50 Đã chọn
+                    </span>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                    <div id="progressBar" class="bg-gradient-to-r from-indigo-500 to-purple-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+
+                <!-- Matrix Button Grid -->
+                <div id="questionMatrix" class="grid grid-cols-5 sm:grid-cols-6 gap-2 max-h-[260px] overflow-y-auto pr-1">
+                    <!-- Matrix buttons populated dynamically -->
+                </div>
+
+                <!-- Flag summary -->
+                <div id="flagRow" class="flex items-center justify-between gap-2 rounded-xl px-3 py-2 bg-pink-500/10 border border-pink-400/25">
+                    <div class="flex items-center space-x-2 text-xs text-pink-300 font-semibold">
+                        <svg class="ic text-pink-400" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>
+                        <span>Chưa làm được: <strong id="flagCount" class="text-white">0</strong> câu</span>
+                    </div>
+                    <button id="flagJumpBtn" onclick="jumpToNextFlag()" class="text-[11px] font-bold px-2.5 py-1 rounded-lg bg-pink-500/20 text-pink-300 hover:bg-pink-500/30 transition">Tới câu kế tiếp</button>
+                </div>
+
+                <!-- Legend Indicator -->
+                <div class="pt-3 border-t border-slate-800 flex flex-wrap gap-x-4 gap-y-2 text-[11px] text-slate-400">
+                    <div class="flex items-center space-x-1.5">
+                        <span class="w-3 h-3 rounded-md bg-slate-800 border border-slate-700"></span>
+                        <span>Chưa làm</span>
+                    </div>
+                    <div id="legendFlag" class="flex items-center space-x-1.5">
+                        <span class="w-3 h-3 rounded-md bg-pink-500/30 border border-pink-400"></span>
+                        <span>Đánh dấu</span>
+                    </div>
+                    <div id="legendSelected" class="flex items-center space-x-1.5">
+                        <span class="w-3 h-3 rounded-md bg-indigo-600"></span>
+                        <span>Đã chọn</span>
+                    </div>
+                    <div id="legendCorrect" class="hidden flex items-center space-x-1.5">
+                        <span class="w-3 h-3 rounded-md bg-emerald-600"></span>
+                        <span>Đúng</span>
+                    </div>
+                    <div id="legendIncorrect" class="hidden flex items-center space-x-1.5">
+                        <span class="w-3 h-3 rounded-md bg-rose-600"></span>
+                        <span>Sai</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Right Main Panel (Question Cards List) -->
+        <section class="lg:col-span-8 space-y-6">
+            <div class="hero-banner rounded-3xl p-6 sm:p-8 shadow-2xl">
+                <div class="relative z-10 space-y-4">
+                    <div class="inline-flex items-center space-x-2 text-[11px] font-semibold tracking-[0.18em] uppercase text-pink-300">
+                        <svg class="ic " viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg><span>Phòng luyện đề chuẩn GDPT 2018</span>
+                    </div>
+                    <h1 class="font-display text-2xl sm:text-3xl font-extrabold text-white leading-tight">
+                        Luyện đề Xác suất THPT<br class="hidden sm:block"> <span class="text-pink-300">bám sát cấu trúc đề thi</span>
+                    </h1>
+                    <div class="flex flex-wrap gap-2 text-[11px] sm:text-xs text-slate-100">
+                        <span class="hero-chip px-3 py-1.5 rounded-full"><svg class="ic mr-1.5 text-pink-300" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg>50 câu trắc nghiệm</span>
+                        <span class="hero-chip px-3 py-1.5 rounded-full"><svg class="ic mr-1.5 text-pink-300" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 22h14"/><path d="M5 2h14"/><path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/><path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/></svg>45 phút</span>
+                        <span class="hero-chip px-3 py-1.5 rounded-full"><svg class="ic mr-1.5 text-pink-300" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>Đánh dấu câu làm sau</span>
+                        <span class="hero-chip px-3 py-1.5 rounded-full"><svg class="ic mr-1.5 text-pink-300" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>Lời giải từng bước</span>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center justify-between px-1 text-xs text-slate-400">
+                <span>Tổng cộng <strong id="visibleCount" class="text-indigo-400">0</strong> câu hỏi</span>
+                <button onclick="scrollToTop()" class="hover:text-slate-200 transition flex items-center space-x-1">
+                    <svg class="ic " viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg>
+                    <span>Lên đầu trang</span>
+                </button>
+            </div>
+
+            <!-- Dynamic Question Cards Stream -->
+            <div id="questionsContainer" class="space-y-6">
+                <!-- Dynamically populated question cards -->
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="border-t border-pink-500/15 mt-6 py-5 text-center text-[11px] text-slate-400">
+        <span class="font-display text-pink-300">Xác Suất THPT</span> · Hệ thống luyện đề &amp; thống kê năng lực · GDPT 2018
+    </footer>
+
+    <div id="resultModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
+        <div class="glass-card max-w-lg w-full rounded-3xl p-6 sm:p-8 space-y-6 transform scale-95 transition-all duration-300 border border-slate-700 shadow-2xl relative">
+            
+            <div class="text-center space-y-2">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-700 to-purple-600 shadow-lg shadow-indigo-900/50 ring-1 ring-pink-300/40 mb-2">
+                    <svg class="ic text-2xl text-amber-300" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-1.21 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98 1.21 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                </div>
+                <h2 class="text-2xl font-black text-white">KẾT QUẢ BÀI THI</h2>
+                <p class="text-xs text-slate-400">Chương Trình Toán THPT GDPT 2018</p>
+            </div>
+
+            <!-- Final Score Display -->
+            <div class="bg-slate-900/90 rounded-2xl p-6 border border-slate-800 text-center space-y-1">
+                <div class="text-xs font-semibold uppercase text-slate-400 tracking-wider">Điểm Số Đạt Được</div>
+                <div class="text-5xl font-black bg-gradient-to-r from-pink-300 via-pink-400 to-indigo-300 bg-clip-text font-display text-transparent py-1">
+                    <span id="finalScore">0.0</span> <span class="text-xl text-slate-500 font-normal">/ 10</span>
+                </div>
+                <p id="scoreGrade" class="text-xs font-medium text-emerald-400 pt-1">Hoàn thành bài thi!</p>
+            </div>
+
+            <!-- Breakdown Statistics Grid -->
+            <div class="grid grid-cols-3 gap-3">
+                <div class="bg-slate-900/60 p-3 rounded-xl border border-emerald-500/20 text-center">
+                    <div class="text-[11px] text-slate-400">Câu Đúng</div>
+                    <div id="modalCorrect" class="text-lg font-bold text-emerald-400 mt-0.5">0</div>
+                </div>
+                <div class="bg-slate-900/60 p-3 rounded-xl border border-rose-500/20 text-center">
+                    <div class="text-[11px] text-slate-400">Câu Sai</div>
+                    <div id="modalIncorrect" class="text-lg font-bold text-rose-400 mt-0.5">0</div>
+                </div>
+                <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-700/50 text-center">
+                    <div class="text-[11px] text-slate-400">Chưa Làm</div>
+                    <div id="modalSkipped" class="text-lg font-bold text-slate-400 mt-0.5">0</div>
+                </div>
+            </div>
+
+            <!-- Time Taken Info -->
+            <div class="flex items-center justify-between text-xs text-slate-400 bg-slate-900/40 px-4 py-2.5 rounded-xl border border-slate-800">
+                <span><svg class="ic text-indigo-400 mr-1.5" viewBox="0 0 24 24" aria-hidden="true"><line x1="10" x2="14" y1="2" y2="2"/><line x1="12" x2="15" y1="14" y2="11"/><circle cx="12" cy="14" r="8"/></svg>Thời gian hoàn thành:</span>
+                <span id="timeSpentText" class="font-bold text-slate-200">--:--</span>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="grid grid-cols-1 gap-3 pt-2">
+                <button onclick="closeResultModal()" class="w-full py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl border border-slate-700 transition">
+                    <svg class="ic mr-1.5" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg> Xem Lời Giải
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
+        <div class="glass-card max-w-sm w-full rounded-2xl p-6 text-center space-y-4 border border-slate-700 shadow-2xl">
+            <div class="w-12 h-12 bg-indigo-500/10 text-indigo-400 rounded-full flex items-center justify-center mx-auto">
+                <svg class="ic text-xl" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+            </div>
+            <h3 id="confirmTitle" class="text-lg font-bold text-white">Xác nhận</h3>
+            <p id="confirmDesc" class="text-xs text-slate-300 leading-relaxed">Bạn có chắc chắn muốn làm điều này?</p>
+            <div class="grid grid-cols-2 gap-3 pt-2">
+                <button id="confirmCancelBtn" class="py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold rounded-xl border border-slate-700">Hủy bỏ</button>
+                <button id="confirmOkBtn" class="py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl shadow-md">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Master Question Dataset (Options[0] is original correct answer)
+        const RAW_QUESTION_BANK = [
+            // --- TOPIC 1: Tổ hợp & XS Cổ điển (13 câu) ---
+            {
+                id: 1,
+                topic: "Tổ hợp & XS cổ điển",
+                level: "VD Cao",
+                question: "Một lớp học có 40 học sinh gồm 25 nam và 15 nữ. Chọn ngẫu nhiên 4 học sinh để đi cắm trại. Tính xác suất để trong 4 học sinh được chọn có **đúng 2 học sinh nữ**.",
+                options: [
+                    "$\\frac{C_{15}^2 \\cdot C_{25}^2}{C_{40}^4} = \\frac{105}{323}$",
+                    "$\\frac{C_{15}^2 + C_{25}^2}{C_{40}^4} = \\frac{43}{323}$",
+                    "$\\frac{C_{15}^1 \\cdot C_{25}^3}{C_{40}^4} = \\frac{115}{323}$",
+                    "$\\frac{A_{15}^2 \\cdot A_{25}^2}{A_{40}^4} = \\frac{105}{646}$"
+                ],
+                explanation: "Không gian mẫu $n(\\Omega) = C_{40}^4 = 91390$.\nSố cách chọn 2 nữ từ 15 nữ là $C_{15}^2 = 105$.\nSố cách chọn 2 nam từ 25 nam là $C_{25}^2 = 300$.\nSố kết quả thuận lợi $n(A) = C_{15}^2 \\cdot C_{25}^2 = 105 \\times 300 = 31500$.\nXác suất $P(A) = \\frac{31500}{91390} = \\frac{105}{323} \\approx 0.3251$."
+            },
+            {
+                id: 2,
+                topic: "Tổ hợp & XS cổ điển",
+                level: "Cơ bản",
+                question: "Gieo một con xúc xắc cân đối đồng chất 6 mặt 2 lần liên tiếp. Tính xác suất để tổng số chấm xuất hiện ở 2 lần gieo bằng $7$.",
+                options: [
+                    "$\\frac{1}{6}$",
+                    "$\\frac{5}{36}$",
+                    "$\\frac{1}{12}$",
+                    "$\\frac{7}{36}$"
+                ],
+                explanation: "Không gian mẫu $n(\\Omega) = 6 \\times 6 = 36$.\nCác cặp số $(a,b)$ có $a + b = 7$ là: $(1,6), (2,5), (3,4), (4,3), (5,2), (6,1)$ (6 cặp).\nXác suất $P = \\frac{6}{36} = \\frac{1}{6}$."
+            },
+            {
+                id: 3,
+                topic: "Tổ hợp & XS cổ điển",
+                level: "Vận dụng",
+                question: "Một hộp chứa 6 quả cầu xanh và 4 quả cầu đỏ. Lấy ngẫu nhiên đồng thời 3 quả cầu. Tính xác suất để lấy được ít nhất 2 quả cầu màu xanh.",
+                options: [
+                    "$\\frac{2}{3}$",
+                    "$\\frac{1}{2}$",
+                    "$\\frac{3}{5}$",
+                    "$\\frac{7}{12}$"
+                ],
+                explanation: "Số cách lấy 3 quả ngẫu nhiên $n(\\Omega) = C_{10}^3 = 120$.\n+ TH1: 2 xanh, 1 đỏ $\\Rightarrow C_6^2 \\cdot C_4^1 = 15 \\times 4 = 60$.\n+ TH2: 3 xanh $\\Rightarrow C_6^3 = 20$.\nSố kết quả thuận lợi: $60 + 20 = 80$.\nXác suất $P = \\frac{80}{120} = \\frac{2}{3}$."
+            },
+            {
+                id: 4,
+                topic: "Tổ hợp & XS cổ điển",
+                level: "Vận dụng",
+                question: "Xếp ngẫu nhiên 5 học sinh A, B, C, D, E vào một hàng ngang. Tính xác suất để hai học sinh A và B luôn đứng cạnh nhau.",
+                options: [
+                    "$\\frac{2}{5}$",
+                    "$\\frac{1}{5}$",
+                    "$\\frac{1}{2}$",
+                    "$\\frac{3}{10}$"
+                ],
+                explanation: "Số cách xếp 5 học sinh là $n(\\Omega) = 5! = 120$.\nCoi A và B là khối X $\\Rightarrow$ Có $4! = 24$ cách xếp X và C,D,E.\nTrong X, A và B tráo vị trí có $2! = 2$ cách $\\Rightarrow n(A) = 24 \\times 2 = 48$.\nXác suất $P = \\frac{48}{120} = \\frac{2}{5}$."
+            },
+            {
+                id: 5,
+                topic: "Tổ hợp & XS cổ điển",
+                level: "VD Cao",
+                question: "Từ các chữ số $0, 1, 2, 3, 4, 5$, lập một số tự nhiên ngẫu nhiên có 4 chữ số khác nhau. Tính xác suất để số lập được chia hết cho 5.",
+                options: [
+                    "$\\frac{9}{25}$",
+                    "$\\frac{1}{3}$",
+                    "$\\frac{2}{5}$",
+                    "$\\frac{11}{30}$"
+                ],
+                explanation: "Số có 4 chữ số $\\overline{abcd}$ ($a \\neq 0$). $n(\\Omega) = 5 \\times 5 \\times 4 \\times 3 = 300$.\nChia hết cho 5 thì $d \\in \\{0, 5\\}$:\n+ $d = 0 \\Rightarrow A_5^3 = 60$ cách.\n+ $d = 5 \\Rightarrow a \\neq 0,5$ (4 cách), $b,c$ chọn $A_4^2 = 12 \\Rightarrow 48$ cách.\nThuận lợi: $60 + 48 = 108 \\Rightarrow P = \\frac{108}{300} = \\frac{9}{25}$."
+            },
+            {
+                id: 6,
+                topic: "Tổ hợp & XS cổ điển",
+                level: "Cơ bản",
+                question: "Rút ngẫu nhiên 1 lá bài từ bộ bài tây 52 lá. Tính xác suất để rút được lá bài mang số Ách (Ace).",
+                options: [
+                    "$\\frac{1}{13}$",
+                    "$\\frac{1}{52}$",
+                    "$\\frac{1}{4}$",
+                    "$\\frac{2}{13}$"
+                ],
+                explanation: "Bộ bài có 52 lá, trong đó có 4 lá Ách.\nXác suất rút được lá Ách $P = \\frac{4}{52} = \\frac{1}{13}$."
+            },
+            {
+                id: 7,
+                topic: "Tổ hợp & XS cổ điển",
+                level: "Vận dụng",
+                question: "Một chiếc hộp chứa 8 quả cầu đỏ và 4 quả cầu đen. Rút ngẫu nhiên 2 quả cầu. Tính xác suất để 2 quả cầu cùng màu.",
+                options: [
+                    "$\\frac{17}{33}$",
+                    "$\\frac{16}{33}$",
+                    "$\\frac{1}{2}$",
+                    "$\\frac{5}{11}$"
+                ],
+                explanation: "$n(\\Omega) = C_{12}^2 = 66$.\n2 quả đỏ: $C_8^2 = 28$.\n2 quả đen: $C_4^2 = 6$.\nThuận lợi: $28 + 6 = 34 \\Rightarrow P = \\frac{34}{66} = \\frac{17}{33}$."
+            },
+            {
+                id: 8,
+                topic: "Tổ hợp & XS cổ điển",
+                level: "VD Cao",
+                question: "Cho đa giác đều có 12 đỉnh. Chọn ngẫu nhiên 3 đỉnh. Tính xác suất để 3 đỉnh chọn được tạo thành một tam giác vuông.",
+                options: [
+                    "$\\frac{3}{11}$",
+                    "$\\frac{2}{11}$",
+                    "$\\frac{1}{11}$",
+                    "$\\frac{4}{11}$"
+                ],
+                explanation: "$n(\\Omega) = C_{12}^3 = 220$.\nĐa giác đều 12 đỉnh có $12/2 = 6$ đường kính.\nMỗi đường kính kết hợp với 1 trong 10 đỉnh còn lại tạo thành 1 tam giác vuông $\\Rightarrow 6 \\times 10 = 60$ tam giác vuông.\nXác suất $P = \\frac{60}{220} = \\frac{3}{11}$."
+            },
+            {
+                id: 9,
+                topic: "Tổ hợp & XS cổ điển",
+                level: "Cơ bản",
+                question: "Gieo đồng thời 2 đồng xu cân đối đồng chất. Tính xác suất để có đúng 1 đồng xu xuất hiện mặt ngửa.",
+                options: [
+                    "$\\frac{1}{2}$",
+                    "$\\frac{1}{4}$",
+                    "$\\frac{3}{4}$",
+                    "$1$"
+                ],
+                explanation: "Không gian mẫu $\\Omega = \\{NN, NS, SN, SS\\} \\Rightarrow n(\\Omega) = 4$.\nCác kết quả đúng 1 ngửa là $\\{NS, SN\\} \\Rightarrow 2$ kết quả.\nXác suất $P = \\frac{2}{4} = \\frac{1}{2}$."
+            },
+            {
+                id: 10,
+                topic: "Tổ hợp & XS cổ điển",
+                level: "Vận dụng",
+                question: "Chọn ngẫu nhiên 3 học sinh từ một tổ gồm 6 nam và 4 nữ. Tính xác suất để chọn được ít nhất 1 học sinh nữ.",
+                options: [
+                    "$\\frac{5}{6}$",
+                    "$\\frac{1}{6}$",
+                    "$\\frac{4}{5}$",
+                    "$\\frac{3}{5}$"
+                ],
+                explanation: "$n(\\Omega) = C_{10}^3 = 120$.\nXét biến cố đối: Chọn cả 3 nam $\\Rightarrow C_6^3 = 20$.\n$P = 1 - \\frac{20}{120} = 1 - \\frac{1}{6} = \\frac{5}{6}$."
+            },
+            {
+                id: 11,
+                topic: "Tổ hợp & XS cổ điển",
+                level: "VD Cao",
+                question: "Xếp 6 người (trong đó có A và B) ngồi xung quanh một bàn tròn 6 ghế. Tính xác suất để A và B ngồi cạnh nhau.",
+                options: [
+                    "$\\frac{2}{5}$",
+                    "$\\frac{1}{3}$",
+                    "$\\frac{1}{2}$",
+                    "$\\frac{1}{5}$"
+                ],
+                explanation: "Số cách xếp 6 người vào bàn tròn là $(6-1)! = 5! = 120$.\nCoi A, B là nhóm X. Xếp X và 4 người vào bàn tròn có $(5-1)! = 4! = 24$ cách.\nTráo A, B trong X có $2! = 2$ cách $\\Rightarrow n(A) = 24 \\times 2 = 48$.\nXác suất $P = \\frac{48}{120} = \\frac{2}{5}$."
+            },
+            {
+                id: 12,
+                topic: "Tổ hợp & XS cổ điển",
+                level: "Cơ bản",
+                question: "Chọn ngẫu nhiên một số tự nhiên từ 1 đến 20. Tính xác suất để chọn được số nguyên tố.",
+                options: [
+                    "$\\frac{2}{5}$",
+                    "$\\frac{9}{20}$",
+                    "$\\frac{1}{2}$",
+                    "$\\frac{7}{20}$"
+                ],
+                explanation: "Các số nguyên tố từ 1 đến 20 là: $\\{2, 3, 5, 7, 11, 13, 17, 19\\}$ (8 số).\nXác suất $P = \\frac{8}{20} = \\frac{2}{5}$."
+            },
+            {
+                id: 13,
+                topic: "Tổ hợp & XS cổ điển",
+                level: "Vận dụng",
+                question: "Một hộp có 5 bi xanh, 4 bi đỏ và 3 bi vàng. Chọn ngẫu nhiên 3 bi. Tính xác suất chọn được 3 bi có đủ 3 màu khác nhau.",
+                options: [
+                    "$\\frac{3}{11}$",
+                    "$\\frac{3}{22}$",
+                    "$\\frac{6}{11}$",
+                    "$\\frac{4}{11}$"
+                ],
+                explanation: "$n(\\Omega) = C_{12}^3 = 220$.\nSố cách chọn 1 bi xanh, 1 bi đỏ, 1 bi vàng: $C_5^1 \\times C_4^1 \\times C_3^1 = 5 \\times 4 \\times 3 = 60$.\nXác suất $P = \\frac{60}{220} = \\frac{3}{11}$."
+            },
+
+            // --- TOPIC 2: Biến cố đối & Phần bù (12 câu) ---
+            {
+                id: 14,
+                topic: "Biến cố đối & Phần bù",
+                level: "VD Cao",
+                question: "Một học sinh làm 10 câu hỏi trắc nghiệm, mỗi câu có 4 phương án trả lời trong đó chỉ có 1 phương án đúng. Học sinh đánh khoanh bừa. Tính xác suất để học sinh đó trả lời **đúng ít nhất 1 câu**.",
+                options: [
+                    "$1 - \\left(\\frac{3}{4}\\right)^{10}$",
+                    "$\\left(\\frac{1}{4}\\right)^{10}$",
+                    "$1 - \\left(\\frac{1}{4}\\right)^{10}$",
+                    "$\\left(\\frac{3}{4}\\right)^{10}$"
+                ],
+                explanation: "Xác suất khoanh sai ở mỗi câu là $\\frac{3}{4}$.\nBiến cố đối $\\overline{A}$: 'Khoanh sai cả 10 câu' $\\Rightarrow P(\\overline{A}) = \\left(\\frac{3}{4}\\right)^{10}$.\nXác suất trả lời đúng ít nhất 1 câu $P(A) = 1 - \\left(\\frac{3}{4}\\right)^{10} \\approx 0.9437$."
+            },
+            {
+                id: 15,
+                topic: "Biến cố đối & Phần bù",
+                level: "Vận dụng",
+                question: "Một xạ thủ bắn 3 viên đạn độc lập vào mục tiêu. Xác suất trúng đích của mỗi viên đạn đều bằng $0.7$. Tính xác suất để mục tiêu bị trúng đạn (có ít nhất 1 viên trúng).",
+                options: [
+                    "$0.973$",
+                    "$0.343$",
+                    "$0.027$",
+                    "$0.847$"
+                ],
+                explanation: "Xác suất mỗi viên đạn trượt là $1 - 0.7 = 0.3$.\nGọi $\\overline{A}$ là 'Cả 3 viên đều trượt' $\\Rightarrow P(\\overline{A}) = 0.3^3 = 0.027$.\nXác suất trúng đạn $P(A) = 1 - 0.027 = 0.973$."
+            },
+            {
+                id: 16,
+                topic: "Biến cố đối & Phần bù",
+                level: "Cơ bản",
+                question: "Cho biến cố $A$ có xác suất $P(A) = 0.42$. Tính xác suất của biến cố đối $\\overline{A}$.",
+                options: [
+                    "$0.58$",
+                    "$0.42$",
+                    "$0.68$",
+                    "$-0.42$"
+                ],
+                explanation: "Theo công thức biến cố đối: $P(\\overline{A}) = 1 - P(A) = 1 - 0.42 = 0.58$."
+            },
+            {
+                id: 17,
+                topic: "Biến cố đối & Phần bù",
+                level: "VD Cao",
+                question: "Một hộp đựng 4 bi đỏ, 5 bi trắng và 6 bi vàng. Chọn ngẫu nhiên 4 viên bi từ hộp. Tính xác suất để 4 viên bi chọn được **không có đủ 3 màu**.",
+                options: [
+                    "$\\frac{43}{91}$",
+                    "$\\frac{48}{91}$",
+                    "$\\frac{20}{91}$",
+                    "$\\frac{35}{91}$"
+                ],
+                explanation: "$n(\\Omega) = C_{15}^4 = 1365$.\nXét biến cố đối $A$: '4 bi được chọn có đủ 3 màu':\n+ 2 đỏ, 1 trắng, 1 vàng: $C_4^2 \\times C_5^1 \\times C_6^1 = 180$.\n+ 1 đỏ, 2 trắng, 1 vàng: $C_4^1 \\times C_5^2 \\times C_6^1 = 240$.\n+ 1 đỏ, 1 trắng, 2 vàng: $C_4^1 \\times C_5^1 \\times C_6^2 = 300$.\n$n(A) = 180 + 240 + 300 = 720 \\Rightarrow P(A) = \\frac{720}{1365} = \\frac{48}{91}$.\nVậy xác suất không đủ 3 màu là $1 - \\frac{48}{91} = \\frac{43}{91}$."
+            },
+            {
+                id: 18,
+                topic: "Biến cố đối & Phần bù",
+                level: "Cơ bản",
+                question: "Gieo 3 đồng xu phân biệt cân đối đồng chất. Tính xác suất để có ít nhất 1 đồng xu xuất hiện mặt ngửa.",
+                options: [
+                    "$\\frac{7}{8}$",
+                    "$\\frac{1}{8}$",
+                    "$\\frac{3}{4}$",
+                    "$\\frac{1}{2}$"
+                ],
+                explanation: "Biến cố đối $\\overline{A}$: 'Cả 3 đồng xu đều sấp' $\\Rightarrow P(\\overline{A}) = \\left(\\frac{1}{2}\\right)^3 = \\frac{1}{8}$.\nXác suất có ít nhất 1 ngửa $P(A) = 1 - \\frac{1}{8} = \\frac{7}{8}$."
+            },
+            {
+                id: 19,
+                topic: "Biến cố đối & Phần bù",
+                level: "Vận dụng",
+                question: "Một lô hàng có 10 sản phẩm, trong đó có 2 phế phẩm. Lấy ngẫu nhiên 3 sản phẩm. Tính xác suất để có ít nhất 1 chính phẩm.",
+                options: [
+                    "$1$",
+                    "$\\frac{14}{15}$",
+                    "$\\frac{1}{15}$",
+                    "$\\frac{11}{15}$"
+                ],
+                explanation: "Vì chỉ có 2 phế phẩm nên khi lấy 3 sản phẩm, không bao giờ xảy ra trường hợp lấy cả 3 phế phẩm.\nDo đó biến cố 'có ít nhất 1 chính phẩm' là biến cố chắc chắn, xác suất bằng $1$."
+            },
+            {
+                id: 20,
+                topic: "Biến cố đối & Phần bù",
+                level: "Vận dụng",
+                question: "Ba xạ thủ độc lập bắn vào một bia. Xác suất bắn trúng của họ lần lượt là $0.6$; $0.7$ và $0.8$. Tính xác suất để có ít nhất một người bắn trúng bia.",
+                options: [
+                    "$0.976$",
+                    "$0.024$",
+                    "$0.336$",
+                    "$0.672$"
+                ],
+                explanation: "Xác suất bắn trượt của 3 người là $1 - 0.6 = 0.4$; $0.3$ và $0.2$.\nBiến cố đối 'Cả 3 người đều trượt': $P(\\overline{A}) = 0.4 \\times 0.3 \\times 0.2 = 0.024$.\nXác suất ít nhất 1 người trúng: $P(A) = 1 - 0.024 = 0.976$."
+            },
+            {
+                id: 21,
+                topic: "Biến cố đối & Phần bù",
+                level: "VD Cao",
+                question: "Gieo một con xúc xắc cân đối 4 lần liên tiếp. Tính xác suất để mặt 6 chấm xuất hiện ít nhất một lần.",
+                options: [
+                    "$1 - \\left(\\frac{5}{6}\\right)^4$",
+                    "$\\left(\\frac{1}{6}\\right)^4$",
+                    "$1 - \\left(\\frac{1}{6}\\right)^4$",
+                    "$\\left(\\frac{5}{6}\\right)^4$"
+                ],
+                explanation: "Xác suất không xuất hiện mặt 6 chấm ở 1 lần gieo là $\\frac{5}{6}$.\nBiến cố đối 'Không xuất hiện mặt 6 ở cả 4 lần gieo': $P(\\overline{A}) = \\left(\\frac{5}{6}\\right)^4$.\nXác suất xuất hiện mặt 6 ít nhất 1 lần $P(A) = 1 - \\left(\\frac{5}{6}\\right)^4 \\approx 0.5177$."
+            },
+            {
+                id: 22,
+                topic: "Biến cố đối & Phần bù",
+                level: "Cơ bản",
+                question: "Một lớp học có 30 học sinh. Xác suất để chọn ngẫu nhiên một học sinh cận thị là $0.3$. Tính xác suất chọn được học sinh không bị cận thị.",
+                options: [
+                    "$0.7$",
+                    "$0.3$",
+                    "$0.5$",
+                    "$0.8$"
+                ],
+                explanation: "Xác suất không bị cận thị $P = 1 - 0.3 = 0.7$."
+            },
+            {
+                id: 23,
+                topic: "Biến cố đối & Phần bù",
+                level: "Vận dụng",
+                question: "Chọn ngẫu nhiên 4 lá bài từ bộ bài 52 lá. Tính xác suất rút được ít nhất 1 lá bài chất Cơ.",
+                options: [
+                    "$1 - \\frac{C_{39}^4}{C_{52}^4}$",
+                    "$\\frac{C_{13}^4}{C_{52}^4}$",
+                    "$1 - \\frac{C_{13}^4}{C_{52}^4}$",
+                    "$\\frac{C_{39}^4}{C_{52}^4}$"
+                ],
+                explanation: "Bộ bài có 13 lá Cơ và 39 lá không phải Cơ.\nBiến cố đối 'Rút 4 lá không có lá Cơ nào': $C_{39}^4 / C_{52}^4$.\nXác suất ít nhất 1 lá Cơ: $P = 1 - \\frac{C_{39}^4}{C_{52}^4}$."
+            },
+            {
+                id: 24,
+                topic: "Biến cố đối & Phần bù",
+                level: "Cơ bản",
+                question: "Cho biết xác suất một hạt giống nảy mầm là $0.85$. Tính xác suất để hạt giống đó không nảy mầm.",
+                options: [
+                    "$0.15$",
+                    "$0.85$",
+                    "$0.25$",
+                    "$0.05$"
+                ],
+                explanation: "$P = 1 - 0.85 = 0.15$."
+            },
+            {
+                id: 25,
+                topic: "Biến cố đối & Phần bù",
+                level: "Vận dụng",
+                question: "Một tổ gồm 6 học sinh nam và 4 học sinh nữ. Chọn ngẫu nhiên 3 học sinh. Tính xác suất chọn được ít nhất 1 học sinh nữ.",
+                options: [
+                    "$\\frac{5}{6}$",
+                    "$\\frac{1}{6}$",
+                    "$\\frac{2}{3}$",
+                    "$\\frac{1}{3}$"
+                ],
+                explanation: "$n(\\Omega) = C_{10}^3 = 120$.\nBiến cố đối: Chọn cả 3 nam $\\Rightarrow C_6^3 = 20$.\n$P = 1 - \\frac{20}{120} = \\frac{100}{120} = \\frac{5}{6}$."
+            },
+
+            // --- TOPIC 3: Quy tắc cộng & Quy tắc nhân (13 câu) ---
+            {
+                id: 26,
+                topic: "Quy tắc cộng & nhân",
+                level: "Cơ bản",
+                question: "Cho hai biến cố độc lập $A$ và $B$ với $P(A) = 0.5$ và $P(B) = 0.6$. Tính xác suất của biến cố giao $P(A \\cap B)$.",
+                options: [
+                    "$0.30$",
+                    "$0.80$",
+                    "$0.10$",
+                    "$0.55$"
+                ],
+                explanation: "Vì $A, B$ độc lập nên $P(A \\cap B) = P(A) \\cdot P(B) = 0.5 \\times 0.6 = 0.30$."
+            },
+            {
+                id: 27,
+                topic: "Quy tắc cộng & nhân",
+                level: "Vận dụng",
+                question: "Cho hai biến cố $A$ và $B$ thỏa mãn $P(A) = 0.4$, $P(B) = 0.5$ và $P(A \\cup B) = 0.7$. Tính $P(A \\cap B)$.",
+                options: [
+                    "$0.20$",
+                    "$0.10$",
+                    "$0.30$",
+                    "$0.25$"
+                ],
+                explanation: "Công thức cộng tổng quát: $P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$\n$\\Rightarrow P(A \\cap B) = 0.4 + 0.5 - 0.7 = 0.20$."
+            },
+            {
+                id: 28,
+                topic: "Quy tắc cộng & nhân",
+                level: "VD Cao",
+                question: "Hai xạ thủ A và B cùng bắn độc lập vào một mục tiêu. Xác suất trúng của A là $0.8$, của B là $0.7$. Tính xác suất để **chỉ có đúng 1 xạ thủ** bắn trúng.",
+                options: [
+                    "$0.38$",
+                    "$0.56$",
+                    "$0.26$",
+                    "$0.44$"
+                ],
+                explanation: "+ A trúng, B trượt: $0.8 \\times (1 - 0.7) = 0.24$.\n+ A trượt, B trúng: $(1 - 0.8) \\times 0.7 = 0.14$.\nXác suất đúng 1 người trúng: $0.24 + 0.14 = 0.38$."
+            },
+            {
+                id: 29,
+                topic: "Quy tắc cộng & nhân",
+                level: "Cơ bản",
+                question: "Cho hai biến cố xung khắc $A$ và $B$ với $P(A) = 0.3$ và $P(B) = 0.4$. Tính xác suất $P(A \\cup B)$.",
+                options: [
+                    "$0.70$",
+                    "$0.12$",
+                    "$0.10$",
+                    "$0.50$"
+                ],
+                explanation: "Vì $A$ và $B$ xung khắc nên $P(A \\cup B) = P(A) + P(B) = 0.3 + 0.4 = 0.70$."
+            },
+            {
+                id: 30,
+                topic: "Quy tắc cộng & nhân",
+                level: "Vận dụng",
+                question: "Ba cầu thủ A, B, C sút phạt đền độc lập với xác suất trúng lần lượt là $0.7$; $0.8$ và $0.9$. Tính xác suất để **cả 3 người đều sút trượt**.",
+                options: [
+                    "$0.006$",
+                    "$0.504$",
+                    "$0.098$",
+                    "$0.024$"
+                ],
+                explanation: "Xác suất trượt của A, B, C lần lượt là $0.3$; $0.2$ và $0.1$.\nVì các lượt sút độc lập: $P = 0.3 \\times 0.2 \\times 0.1 = 0.006$."
+            },
+            {
+                id: 31,
+                topic: "Quy tắc cộng & nhân",
+                level: "Cơ bản",
+                question: "Gieo một đồng xu và một con xúc xắc đồng thời. Tính xác suất để đồng xu xuất hiện mặt ngửa và con xúc xắc xuất hiện mặt 6 chấm.",
+                options: [
+                    "$\\frac{1}{12}$",
+                    "$\\frac{1}{6}$",
+                    "$\\frac{2}{3}$",
+                    "$\\frac{1}{4}$"
+                ],
+                explanation: "Xác suất đồng xu ngửa là $1/2$. Xác suất xúc xắc mặt 6 là $1/6$.\nDo độc lập: $P = \\frac{1}{2} \\times \\frac{1}{6} = \\frac{1}{12}$."
+            },
+            {
+                id: 32,
+                topic: "Quy tắc cộng & nhân",
+                level: "Vận dụng",
+                question: "Hai máy tính hoạt động độc lập. Xác suất để máy 1 và máy 2 bị hỏng trong ngày lần lượt là $0.1$ và $0.2$. Tính xác suất để có đúng 1 máy bị hỏng.",
+                options: [
+                    "$0.26$",
+                    "$0.02$",
+                    "$0.28$",
+                    "$0.18$"
+                ],
+                explanation: "+ Máy 1 hỏng, máy 2 tốt: $0.1 \\times 0.8 = 0.08$.\n+ Máy 1 tốt, máy 2 hỏng: $0.9 \\times 0.2 = 0.18$.\nXác suất đúng 1 máy hỏng: $0.08 + 0.18 = 0.26$."
+            },
+            {
+                id: 33,
+                topic: "Quy tắc cộng & nhân",
+                level: "VD Cao",
+                question: "Một hệ thống gồm 2 linh kiện A và B mắc nối tiếp. Hệ thống chỉ hoạt động khi cả 2 linh kiện cùng hoạt động tốt. Xác suất để A và B hoạt động tốt lần lượt là $0.9$ và $0.85$. Tính xác suất để hệ thống hoạt động.",
+                options: [
+                    "$0.765$",
+                    "$0.985$",
+                    "$0.175$",
+                    "$0.850$"
+                ],
+                explanation: "Áp dụng quy tắc nhân cho 2 linh kiện độc lập: $P = 0.9 \\times 0.85 = 0.765$."
+            },
+            {
+                id: 34,
+                topic: "Quy tắc cộng & nhân",
+                level: "VD Cao",
+                question: "Một hệ thống gồm 2 linh kiện A và B mắc song song. Hệ thống sẽ hoạt động khi có ít nhất 1 linh kiện hoạt động. Xác suất linh kiện A và B bị hỏng lần lượt là $0.1$ và $0.2$. Tính xác suất để hệ thống hoạt động.",
+                options: [
+                    "$0.98$",
+                    "$0.72$",
+                    "$0.02$",
+                    "$0.88$"
+                ],
+                explanation: "Hệ thống ngừng hoạt động khi cả 2 linh kiện cùng hỏng $\\Rightarrow P_{\\text{hỏng}} = 0.1 \\times 0.2 = 0.02$.\nXác suất hệ thống hoạt động: $P = 1 - 0.02 = 0.98$."
+            },
+            {
+                id: 35,
+                topic: "Quy tắc cộng & nhân",
+                level: "Vận dụng",
+                question: "Hai công ty A và B cùng nộp hồ sơ thầu. Xác suất A trúng thầu là $0.6$, B trúng thầu là $0.5$, cả hai cùng trúng thầu là $0.3$. Tính xác suất có ít nhất 1 công ty trúng thầu.",
+                options: [
+                    "$0.8$",
+                    "$0.9$",
+                    "$0.7$",
+                    "$1.1$"
+                ],
+                explanation: "$P(A \\cup B) = P(A) + P(B) - P(A \\cap B) = 0.6 + 0.5 - 0.3 = 0.8$."
+            },
+            {
+                id: 36,
+                topic: "Quy tắc cộng & nhân",
+                level: "Cơ bản",
+                question: "Cho $P(A) = 0.6$, $P(B) = 0.3$. Biết $A$ và $B$ là hai biến cố độc lập, tính $P(A \\cup B)$.",
+                options: [
+                    "$0.72$",
+                    "$0.90$",
+                    "$0.18$",
+                    "$0.42$"
+                ],
+                explanation: "$P(A \\cap B) = 0.6 \\times 0.3 = 0.18$.\n$P(A \\cup B) = 0.6 + 0.3 - 0.18 = 0.72$."
+            },
+            {
+                id: 37,
+                topic: "Quy tắc cộng & nhân",
+                level: "Vận dụng",
+                question: "Ba người A, B, C độc lập giải cùng một bài toán. Xác suất giải đúng của họ lần lượt là $0.7$; $0.8$ và $0.6$. Tính xác suất để bài toán được giải (có ít nhất 1 người giải đúng).",
+                options: [
+                    "$0.976$",
+                    "$0.336$",
+                    "$0.024$",
+                    "$0.820$"
+                ],
+                explanation: "Xác suất cả 3 người giải sai: $(1-0.7)(1-0.8)(1-0.6) = 0.3 \\times 0.2 \\times 0.4 = 0.024$.\nXác suất bài toán được giải: $1 - 0.024 = 0.976$."
+            },
+            {
+                id: 38,
+                topic: "Quy tắc cộng & nhân",
+                level: "Cơ bản",
+                question: "Hai sự kiện A và B độc lập. Biết $P(A) = 0.4$ và $P(\\overline{B}) = 0.3$. Tính $P(A \\cap B)$.",
+                options: [
+                    "$0.28$",
+                    "$0.12$",
+                    "$0.70$",
+                    "$0.40$"
+                ],
+                explanation: "$P(B) = 1 - 0.3 = 0.7$.\nVì độc lập: $P(A \\cap B) = 0.4 \\times 0.7 = 0.28$."
+            },
+
+            // --- TOPIC 4: XS Có điều kiện & Bayes (Lớp 12 GDPT 2018) (12 câu) ---
+            {
+                id: 39,
+                topic: "XS Có điều kiện & Bayes",
+                level: "Vận dụng",
+                question: "Cho $P(A) = 0.4$, $P(B) = 0.5$ và $P(A \\cap B) = 0.2$. Tính xác suất có điều kiện $P(A|B)$.",
+                options: [
+                    "$0.40$",
+                    "$0.50$",
+                    "$0.25$",
+                    "$0.80$"
+                ],
+                explanation: "Công thức xác suất có điều kiện: $P(A|B) = \\frac{P(A \\cap B)}{P(B)} = \\frac{0.2}{0.5} = 0.40$."
+            },
+            {
+                id: 40,
+                topic: "XS Có điều kiện & Bayes",
+                level: "VD Cao",
+                question: "Một nhà máy có 2 dây chuyền I và II. Dây chuyền I sản xuất $60\\%$ tổng sản phẩm với tỉ lệ phế phẩm là $2\\%$. Dây chuyền II sản xuất $40\\%$ tổng sản phẩm với tỉ lệ phế phẩm là $3\\%$. Lấy ngẫu nhiên 1 sản phẩm. Tính xác suất để sản phẩm là phế phẩm.",
+                options: [
+                    "$0.024$",
+                    "$0.025$",
+                    "$0.030$",
+                    "$0.018$"
+                ],
+                explanation: "Theo công thức xác suất toàn phần:\n$P(F) = P(I) \\cdot P(F|I) + P(II) \\cdot P(F|II) = 0.6 \\times 0.02 + 0.4 \\times 0.03 = 0.012 + 0.012 = 0.024$."
+            },
+            {
+                id: 41,
+                topic: "XS Có điều kiện & Bayes",
+                level: "VD Cao",
+                question: "Trở lại bài toán nhà máy ở câu trên (Dây chuyền I 60% SP, phế phẩm 2%; Dây chuyền II 40% SP, phế phẩm 3%). Kiểm tra 1 sản phẩm thấy đó là **phế phẩm**. Tính xác suất để phế phẩm đó do **dây chuyền I** sản xuất.",
+                options: [
+                    "$0.50$",
+                    "$0.60$",
+                    "$0.40$",
+                    "$0.48$"
+                ],
+                explanation: "Áp dụng Công thức Bayes: $P(I|F) = \\frac{P(I) \\cdot P(F|I)}{P(F)} = \\frac{0.6 \\times 0.02}{0.024} = \\frac{0.012}{0.024} = 0.50$ ($50\\%$)."
+            },
+            {
+                id: 42,
+                topic: "XS Có điều kiện & Bayes",
+                level: "Vận dụng",
+                question: "Có hai hộp bi. Hộp 1 chứa 3 bi trắng, 2 bi đen. Hộp 2 chứa 2 bi trắng, 4 bi đen. Rút ngẫu nhiên 1 hộp rồi từ hộp đó rút ngẫu nhiên 1 bi. Tính xác suất rút được bi trắng.",
+                options: [
+                    "$\\frac{7}{15}$",
+                    "$\\frac{1}{2}$",
+                    "$\\frac{3}{10}$",
+                    "$\\frac{4}{15}$"
+                ],
+                explanation: "$P(H_1) = P(H_2) = 0.5$.\n$P(T|H_1) = \\frac{3}{5}$; $P(T|H_2) = \\frac{2}{6} = \\frac{1}{3}$.\n$P(T) = 0.5 \\times \\frac{3}{5} + 0.5 \\times \\frac{1}{3} = \\frac{3}{10} + \\frac{1}{6} = \\frac{14}{30} = \\frac{7}{15}$."
+            },
+            {
+                id: 43,
+                topic: "XS Có điều kiện & Bayes",
+                level: "VD Cao",
+                question: "Tỉ lệ người mắc bệnh X trong cộng đồng là $1\\%$. Một xét nghiệm y tế có độ chính xác $95\\%$ khi kiểm tra người mắc bệnh và báo sai $5\\%$ khi kiểm tra người không mắc bệnh. Tính xác suất để một người được chọn ngẫu nhiên xét nghiệm cho **kết quả dương tính**.",
+                options: [
+                    "$0.059$",
+                    "$0.095$",
+                    "$0.010$",
+                    "$0.0495$"
+                ],
+                explanation: "Gọi $B$ là biến cố mắc bệnh $\\Rightarrow P(B) = 0.01, P(\\overline{B}) = 0.99$.\n$P(T|B) = 0.95$, $P(T|\\overline{B}) = 0.05$.\n$P(T) = 0.01 \\times 0.95 + 0.99 \\times 0.05 = 0.0095 + 0.0495 = 0.059$ ($5.9\\%$)."
+            },
+            {
+                id: 44,
+                topic: "XS Có điều kiện & Bayes",
+                level: "VD Cao",
+                question: "Tiếp tục bài toán xét nghiệm bệnh X (Tỉ lệ bệnh 1%, xét nghiệm báo dương tính là $5.9\\%$). Một người đi xét nghiệm nhận kết quả **dương tính**. Tính xác suất để người này **thực sự mắc bệnh**.",
+                options: [
+                    "$\\approx 0.161$ (hay $16.1\\%$)",
+                    "$0.950$ (hay $95\\%$)",
+                    "$0.500$ (hay $50\\%$)",
+                    "$0.059$ (hay $5.9\\%$)"
+                ],
+                explanation: "Áp dụng Công thức Bayes: $P(B|T) = \\frac{P(B) \\cdot P(T|B)}{P(T)} = \\frac{0.01 \\times 0.95}{0.059} = \\frac{0.0095}{0.059} \\approx 0.16102$ ($16.1\\%$)."
+            },
+            {
+                id: 45,
+                topic: "XS Có điều kiện & Bayes",
+                level: "Vận dụng",
+                question: "Cho $P(A) = 0.3$, $P(B) = 0.6$, $P(B|A) = 0.5$. Tính xác suất có điều kiện $P(A|B)$.",
+                options: [
+                    "$0.25$",
+                    "$0.15$",
+                    "$0.30$",
+                    "$0.50$"
+                ],
+                explanation: "Ta có $P(A \\cap B) = P(A) \\cdot P(B|A) = 0.3 \\times 0.5 = 0.15$.\nDo đó $P(A|B) = \\frac{P(A \\cap B)}{P(B)} = \\frac{0.15}{0.6} = 0.25$."
+            },
+            {
+                id: 46,
+                topic: "XS Có điều kiện & Bayes",
+                level: "Vận dụng",
+                question: "Tỉ lệ học sinh giỏi Toán của một trường là $20\\%$, giỏi Văn là $15\\%$, giỏi cả Toán và Văn là $10\\%$. Chọn ngẫu nhiên 1 học sinh giỏi Toán. Tính xác suất học sinh đó cũng giỏi Văn.",
+                options: [
+                    "$0.50$",
+                    "$0.667$",
+                    "$0.75$",
+                    "$0.20$"
+                ],
+                explanation: "Gọi $T$ là giỏi Toán ($P(T)=0.2$), $V$ là giỏi Văn ($P(T \\cap V)=0.1$).\n$P(V|T) = \\frac{P(T \\cap V)}{P(T)} = \\frac{0.1}{0.2} = 0.50$ ($50\\%$)."
+            },
+            {
+                id: 47,
+                topic: "XS Có điều kiện & Bayes",
+                level: "VD Cao",
+                question: "Hộp A chứa 4 quả cầu đỏ, 6 quả cầu xanh. Hộp B chứa 5 quả cầu đỏ, 3 quả cầu xanh. Lấy ngẫu nhiên 1 quả cầu từ hộp A bỏ vào hộp B, sau đó rút 1 quả từ hộp B. Tính xác suất quả rút từ hộp B là **quả đỏ**.",
+                options: [
+                    "$\\frac{27}{45} = \\frac{3}{5}$",
+                    "$\\frac{1}{2}$",
+                    "$\\frac{5}{9}$",
+                    "$\\frac{4}{9}$"
+                ],
+                explanation: "+ TH1: Rút quả đỏ từ A bỏ vào B (xác suất 4/10). Hộp B có 6 đỏ, 3 xanh $\\Rightarrow$ rút đỏ xác suất 6/9.\n+ TH2: Rút quả xanh từ A bỏ vào B (xác suất 6/10). Hộp B có 5 đỏ, 4 xanh $\\Rightarrow$ rút đỏ xác suất 5/9.\n$P = \\frac{4}{10} \\times \\frac{6}{9} + \\frac{6}{10} \\times \\frac{5}{9} = \\frac{24 + 30}{90} = \\frac{54}{90} = \\frac{3}{5}$."
+            },
+            {
+                id: 48,
+                topic: "XS Có điều kiện & Bayes",
+                level: "Cơ bản",
+                question: "Cho hai biến cố $A, B$ thỏa mãn $P(A) = 0.6$ và $P(A \\cap B) = 0.18$. Tính xác suất có điều kiện $P(B|A)$.",
+                options: [
+                    "$0.30$",
+                    "$0.108$",
+                    "$0.42$",
+                    "$0.24$"
+                ],
+                explanation: "$P(B|A) = \\frac{P(A \\cap B)}{P(A)} = \\frac{0.18}{0.6} = 0.30$."
+            },
+            {
+                id: 49,
+                topic: "XS Có điều kiện & Bayes",
+                level: "VD Cao",
+                question: "Hai lô hàng: Lô 1 có 9 chính phẩm, 1 phế phẩm; Lô 2 có 8 chính phẩm, 2 phế phẩm. Chọn ngẫu nhiên 1 lô hàng, từ đó lấy ra 1 sản phẩm thấy đó là chính phẩm. Tính xác suất để chính phẩm đó thuộc Lô 1.",
+                options: [
+                    "$\\frac{9}{17}$",
+                    "$\\frac{8}{17}$",
+                    "$\\frac{1}{2}$",
+                    "$\\frac{9}{20}$"
+                ],
+                explanation: "$P(L_1) = P(L_2) = 0.5$.\n$P(C|L_1) = 0.9$; $P(C|L_2) = 0.8 \\Rightarrow P(C) = 0.5 \\times 0.9 + 0.5 \\times 0.8 = 0.85$.\nBayes: $P(L_1|C) = \\frac{0.5 \\times 0.9}{0.85} = \\frac{0.45}{0.85} = \\frac{9}{17}$."
+            },
+            {
+                id: 50,
+                topic: "XS Có điều kiện & Bayes",
+                level: "VD Cao",
+                question: "Một nhóm bệnh nhân được điều trị: $60\\%$ theo phương pháp A (tỉ lệ khỏi $80\\%$), $40\\%$ theo phương pháp B (tỉ lệ khỏi $70\\%$). Chọn ngẫu nhiên 1 bệnh nhân đã khỏi bệnh. Tính xác suất bệnh nhân này điều trị theo **phương pháp A**.",
+                options: [
+                    "$\\frac{12}{19} \\approx 0.6316$",
+                    "$\\frac{7}{19}$",
+                    "$0.6000$",
+                    "$0.8000$"
+                ],
+                explanation: "Xác suất khỏi bệnh tổng quát: $P(K) = 0.6 \\times 0.8 + 0.4 \\times 0.7 = 0.48 + 0.28 = 0.76$.\nCông thức Bayes: $P(A|K) = \\frac{0.6 \\times 0.8}{0.76} = \\frac{0.48}{0.76} = \\frac{12}{19} \\approx 0.6316$."
+            }
+        ];
+
+        let state = {
+            questions: [],       // Processed array with shuffled options
+            userAnswers: {},     // qId -> selectedIndex
+            isSubmitted: false,  // True only after clicking NỘP BÀI
+            timerSeconds: 45 * 60,
+            timerInterval: null,
+            flagged: {}          // qId -> true (câu đánh dấu chưa làm được)
+        };
+
+        window.onload = function() {
+            initTest();
+        };
+
+        // Fisher-Yates Option Shuffling
+        function prepareQuestions(rawBank) {
+            return rawBank.map(q => {
+                const originalCorrectText = q.options[0]; // First item in raw data is correct answer
+                const shuffledOpts = [...q.options];
+
+                for (let i = shuffledOpts.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [shuffledOpts[i], shuffledOpts[j]] = [shuffledOpts[j], shuffledOpts[i]];
+                }
+
+                return {
+                    ...q,
+                    shuffledOptions: shuffledOpts,
+                    correctIndex: shuffledOpts.indexOf(originalCorrectText)
+                };
+            });
+        }
+
+        function initTest() {
+            state.userAnswers = {};
+            state.flagged = {};
+            state.isSubmitted = false;
+            state.questions = prepareQuestions(RAW_QUESTION_BANK);
+
+            // Update UI status banner
+            document.getElementById('statusTitle').innerText = "Đang Làm Bài Thi";
+            document.getElementById('statusDesc').innerText = "Chọn đáp án cho các câu hỏi. Kết quả Đúng/Sai và Lời giải chi tiết chỉ hiển thị sau khi nhấn nút NỘP BÀI.";
+            (function(){const el=document.getElementById('statusIcon'); el.className='text-xl inline-flex'; el.innerHTML='<svg class="ic " viewBox="0 0 24 24" aria-hidden="true"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>';})();
+            document.getElementById('legendSelected').classList.remove('hidden');
+            document.getElementById('legendCorrect').classList.add('hidden');
+            document.getElementById('legendIncorrect').classList.add('hidden');
+
+            startTimer(45 * 60);
+            renderAll();
+        }
+
+        function startTimer(seconds) {
+            clearInterval(state.timerInterval);
+            state.timerSeconds = seconds;
+            updateTimerDisplay();
+
+            state.timerInterval = setInterval(() => {
+                state.timerSeconds--;
+                updateTimerDisplay();
+                if (state.timerSeconds <= 0) {
+                    clearInterval(state.timerInterval);
+                    submitExam();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(state.timerSeconds / 60);
+            const secs = state.timerSeconds % 60;
+            document.getElementById('timerDisplay').innerText = 
+                `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function fmt(t) {
+            return String(t).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+        }
+
+        function renderMath(el) {
+            if (window.renderMathInElement) {
+                renderMathInElement(el || document.body, {
+                    delimiters: [
+                        {left: "$$", right: "$$", display: true},
+                        {left: "$", right: "$", display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
+
+        function triggerKaTeX() {
+            renderMath(document.body);
+        }
+
+        function refreshCard(qId) {
+            const filtered = getFilteredQuestions();
+            const idx = filtered.findIndex(x => x.id === qId);
+            const oldCard = document.getElementById(`question-card-${qId}`);
+            if (idx >= 0 && oldCard && window.buildQuestionCard) {
+                const newCard = window.buildQuestionCard(filtered[idx], idx);
+                oldCard.replaceWith(newCard);
+                renderMath(newCard);
+            } else {
+                renderQuestions();
+                renderMath(document.body);
+            }
+        }
+
+        function selectOption(qId, optionIdx) {
+            if (state.isSubmitted) return; // Frozen after submitting
+
+            state.userAnswers[qId] = optionIdx;
+
+            updateProgress();
+            renderMatrix();
+            refreshCard(qId);
+        }
+
+        function toggleFlag(qId) {
+            if (state.isSubmitted) return;
+            if (state.flagged[qId]) delete state.flagged[qId];
+            else state.flagged[qId] = true;
+
+            updateProgress();
+            renderMatrix();
+            refreshCard(qId);
+        }
+
+        function jumpToNextFlag() {
+            const ids = state.questions.filter(q => state.flagged[q.id]).map(q => q.id);
+            if (ids.length === 0) return;
+            let target = null;
+            for (const id of ids) {
+                const el = document.getElementById(`question-card-${id}`);
+                if (el && el.getBoundingClientRect().top > 140) { target = el; break; }
+            }
+            if (!target) target = document.getElementById(`question-card-${ids[0]}`);
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function getFilteredQuestions() {
+            return state.questions;
+        }
+
+        function updateProgress() {
+            const total = state.questions.length;
+            const answered = Object.keys(state.userAnswers).length;
+            const percent = total > 0 ? Math.round((answered / total) * 100) : 0;
+
+            document.getElementById('progressText').innerText = `${answered} / ${total} Đã chọn`;
+            document.getElementById('progressBar').style.width = `${percent}%`;
+
+            const flagN = Object.keys(state.flagged).length;
+            document.getElementById('flagCount').innerText = flagN;
+            document.getElementById('flagRow').classList.toggle('hidden', state.isSubmitted);
+            document.getElementById('legendFlag').classList.toggle('hidden', state.isSubmitted);
+            const jb = document.getElementById('flagJumpBtn');
+            jb.disabled = flagN === 0;
+            jb.classList.toggle('opacity-40', flagN === 0);
+        }
+
+        function renderMatrix() {
+            const container = document.getElementById('questionMatrix');
+            container.innerHTML = '';
+
+            const filtered = getFilteredQuestions();
+            document.getElementById('visibleCount').innerText = filtered.length;
+
+            filtered.forEach((q, idx) => {
+                const isAnswered = state.userAnswers.hasOwnProperty(q.id);
+                const selectedIdx = state.userAnswers[q.id];
+
+                let btnClass = "bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700";
+
+                if (isAnswered) {
+                    if (!state.isSubmitted) {
+                        // BEFORE SUBMIT: Pure Indigo selection status
+                        btnClass = "bg-indigo-600 text-white border-indigo-500 font-bold shadow-md shadow-indigo-900/30";
+                    } else {
+                        // AFTER SUBMIT: Show Green (Correct) / Red (Wrong)
+                        if (selectedIdx === q.correctIndex) {
+                            btnClass = "bg-emerald-600 text-white border-emerald-500 font-bold shadow-md shadow-emerald-900/30";
+                        } else {
+                            btnClass = "bg-rose-600 text-white border-rose-500 font-bold shadow-md shadow-rose-900/30";
+                        }
+                    }
+                }
+
+                if (!state.isSubmitted && state.flagged[q.id]) {
+                    btnClass = isAnswered ? btnClass + ' m-flag' : "bg-pink-500/20 text-pink-300 border-pink-400 font-bold m-flag";
+                }
+
+                const btn = document.createElement('button');
+                btn.className = `w-full h-9 text-xs rounded-xl font-medium border flex items-center justify-center transition-all duration-150 ${btnClass}`;
+                btn.innerText = idx + 1;
+                btn.onclick = () => {
+                    const el = document.getElementById(`question-card-${q.id}`);
+                    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                };
+
+                container.appendChild(btn);
+            });
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+
+            const filtered = getFilteredQuestions();
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="glass-card p-12 text-center rounded-3xl space-y-3">
+                        <svg class="ic text-4xl text-slate-600" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 14 1.5-2.9A2 2 0 0 1 9.24 10H20a2 2 0 0 1 1.94 2.5l-1.54 6a2 2 0 0 1-1.95 1.5H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h3.9a2 2 0 0 1 1.69.9l.81 1.2a2 2 0 0 0 1.67.9H18a2 2 0 0 1 2 2v2"/></svg>
+                        <p class="text-slate-400 text-sm">Không tìm thấy câu hỏi nào phù hợp với bộ lọc!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const buildCard = (q, displayIdx) => {
+                const isAnswered = state.userAnswers.hasOwnProperty(q.id);
+                const selectedOptionIdx = state.userAnswers[q.id];
+
+                const card = document.createElement('div');
+                card.id = `question-card-${q.id}`;
+                card.className = 'glass-card p-5 sm:p-7 rounded-3xl space-y-5 transition duration-200 border border-slate-800 hover:border-slate-700';
+
+
+                const labels = ['A', 'B', 'C', 'D'];
+
+                const isFlagged = !!state.flagged[q.id];
+                if (isFlagged && !state.isSubmitted) card.classList.add('is-flagged');
+                const flagBtn = state.isSubmitted ? '' : `
+                    <button onclick="toggleFlag(${q.id})" class="flag-btn ${isFlagged ? 'on' : ''}" title="Đánh dấu câu chưa làm được để quay lại sau">
+                        <svg class="ic " viewBox="0 0 24 24" aria-hidden="true"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>
+                        <span>${isFlagged ? 'Đã đánh dấu' : 'Đánh dấu chưa làm được'}</span>
+                    </button>`;
+
+                // Options HTML
+                let optionsHtml = '<div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">';
+
+                q.shuffledOptions.forEach((optText, optIdx) => {
+                    let optStyle = "bg-slate-900/60 hover:bg-slate-800/80 border-slate-800 text-slate-300";
+                    let badgeStyle = "bg-slate-800 text-slate-400";
+                    let feedbackIcon = "";
+
+                    if (isAnswered && selectedOptionIdx === optIdx) {
+                        if (!state.isSubmitted) {
+                            // BEFORE SUBMIT: ONLY active selected Indigo styling!
+                            optStyle = "bg-indigo-950/80 border-indigo-500 text-indigo-200 font-medium shadow-md shadow-indigo-950/40 ring-1 ring-indigo-500";
+                            badgeStyle = "bg-indigo-600 text-white font-bold";
+                        }
+                    }
+
+                    if (state.isSubmitted) {
+                        // AFTER SUBMIT: Reveal Correct (Green) / Incorrect (Red)
+                        if (optIdx === q.correctIndex) {
+                            optStyle = "bg-emerald-950/80 border-emerald-500 text-emerald-200 font-medium shadow-md shadow-emerald-950/40 ring-1 ring-emerald-500";
+                            badgeStyle = "bg-emerald-600 text-white font-bold";
+                            feedbackIcon = '<svg class="ic text-emerald-400 text-lg ml-auto" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>';
+                        } else if (isAnswered && selectedOptionIdx === optIdx) {
+                            optStyle = "bg-rose-950/80 border-rose-500 text-rose-200 font-medium shadow-md shadow-rose-950/40 ring-1 ring-rose-500";
+                            badgeStyle = "bg-rose-600 text-white font-bold";
+                            feedbackIcon = '<svg class="ic text-rose-400 text-lg ml-auto" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>';
+                        }
+                    }
+
+                    optionsHtml += `
+                        <button onclick="selectOption(${q.id}, ${optIdx})" 
+                                class="opt-btn w-full text-left p-3.5 rounded-2xl border flex items-center space-x-3 transition duration-150 group ${optStyle}">
+                            <span class="w-7 h-7 rounded-xl flex items-center justify-center text-xs font-bold transition ${badgeStyle}">
+                                ${labels[optIdx]}
+                            </span>
+                            <span class="text-sm sm:text-[15px] flex-1 math-content leading-relaxed">${fmt(optText)}</span>
+                            ${feedbackIcon}
+                        </button>
+                    `;
+                });
+                optionsHtml += '</div>';
+
+                // Solution Box - ONLY AFTER SUBMIT!
+                let solutionHtml = '';
+                if (state.isSubmitted) {
+                    solutionHtml = `
+                        <div class="mt-4 p-4 rounded-2xl bg-slate-900/90 border border-indigo-500/30 space-y-2 animate-fadeIn">
+                            <div class="flex items-center space-x-2 text-indigo-400 text-xs font-bold uppercase tracking-wider">
+                                <svg class="ic text-amber-400" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+                                <span>LỜI GIẢI CHI TIẾT TỪNG BƯỚC:</span>
+                            </div>
+                            <div class="text-sm text-slate-200 math-content leading-relaxed whitespace-pre-line pl-1">
+                                ${fmt(q.explanation)}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <div class="flex items-center space-x-2">
+                            <span class="px-3 py-1 bg-indigo-600 text-white font-extrabold text-xs rounded-xl shadow-sm">
+                                CÂU ${displayIdx + 1}
+                            </span>
+                        </div>
+                        ${flagBtn}
+                    </div>
+
+                    <!-- Question stem -->
+                    <div class="text-sm sm:text-base text-slate-100 font-medium leading-relaxed math-content pt-1">
+                        ${fmt(q.question)}
+                    </div>
+
+                    <!-- Options list -->
+                    ${optionsHtml}
+
+                    <!-- Solution Box -->
+                    ${solutionHtml}
+                `;
+
+                return card;
+            };
+
+            window.buildQuestionCard = buildCard;
+            filtered.forEach((q, i) => container.appendChild(buildCard(q, i)));
+        }
+
+        function renderAll() {
+            updateProgress();
+            renderMatrix();
+            renderQuestions();
+            triggerKaTeX();
+        }
+
+        // Submit Exam Handler
+        function submitExam() {
+            if (state.isSubmitted) return;
+
+            const answeredCount = Object.keys(state.userAnswers).length;
+            const totalCount = state.questions.length;
+
+            const flaggedCount = Object.keys(state.flagged).length;
+
+            if (answeredCount < totalCount || flaggedCount > 0) {
+                let msg = `Bạn mới làm ${answeredCount}/${totalCount} câu.`;
+                if (flaggedCount > 0) msg += ` Còn ${flaggedCount} câu đang đánh dấu chưa làm được.`;
+                msg += ' Bạn có chắc chắn muốn Nộp Bài ngay?';
+                showConfirm("Xác nhận Nộp Bài", msg, () => executeSubmit());
+            } else {
+                executeSubmit();
+            }
+        }
+
+        function executeSubmit() {
+            state.isSubmitted = true;
+            clearInterval(state.timerInterval);
+
+            // Update UI status banner
+            document.getElementById('statusTitle').innerText = "Đã Nộp Bài - Đang Hiển Thị Lời Giải";
+            document.getElementById('statusDesc').innerText = "Hệ thống đã khóa lựa chọn, đánh dấu màu Đúng (Xanh)/Sai (Đỏ) và mở lời giải chi tiết cho tất cả câu hỏi.";
+            (function(){const el=document.getElementById('statusIcon'); el.className='text-xl text-emerald-400 inline-flex'; el.innerHTML='<svg class="ic " viewBox="0 0 24 24" aria-hidden="true"><path d="M21 10.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12.5"/><path d="m9 11 3 3L22 4"/></svg>';})();
+            document.getElementById('legendSelected').classList.add('hidden');
+            document.getElementById('legendCorrect').classList.remove('hidden');
+            document.getElementById('legendIncorrect').classList.remove('hidden');
+
+            let correctCount = 0;
+            let incorrectCount = 0;
+            let skippedCount = 0;
+
+            state.questions.forEach(q => {
+                if (state.userAnswers.hasOwnProperty(q.id)) {
+                    if (state.userAnswers[q.id] === q.correctIndex) {
+                        correctCount++;
+                    } else {
+                        incorrectCount++;
+                    }
+                } else {
+                    skippedCount++;
+                }
+            });
+
+            const score = ((correctCount / state.questions.length) * 10).toFixed(1);
+
+            // Update Result Modal
+            document.getElementById('finalScore').innerText = score;
+            document.getElementById('modalCorrect').innerText = correctCount;
+            document.getElementById('modalIncorrect').innerText = incorrectCount;
+            document.getElementById('modalSkipped').innerText = skippedCount;
+
+            const spentSeconds = (45 * 60) - state.timerSeconds;
+            const spentMins = Math.floor(spentSeconds / 60);
+            const spentSecs = spentSeconds % 60;
+            document.getElementById('timeSpentText').innerText = `${spentMins} phút ${spentSecs} giây`;
+
+            const scoreGrade = document.getElementById('scoreGrade');
+            if (score >= 8.5) {
+                scoreGrade.innerText = "Xuất sắc! Bạn đã làm chủ hoàn toàn kiến thức Xác suất THPT.";
+                scoreGrade.className = "text-xs font-semibold text-emerald-400 pt-1";
+            } else if (score >= 6.5) {
+                scoreGrade.innerText = "Khá tốt! Hãy rà soát các câu sai ở phần Lời giải chi tiết bên dưới.";
+                scoreGrade.className = "text-xs font-semibold text-teal-400 pt-1";
+            } else {
+                scoreGrade.innerText = "Cần cố gắng thêm! Xem kỹ phần Lời giải từng bước để củng cố lại kiến thức.";
+                scoreGrade.className = "text-xs font-semibold text-amber-400 pt-1";
+            }
+
+            if (score >= 7.0 && window.confetti) {
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            }
+
+            openResultModal();
+            renderAll();
+        }
+
+        // Modal Controls
+        function openResultModal() {
+            const modal = document.getElementById('resultModal');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modal.children[0].classList.remove('scale-95');
+            modal.children[0].classList.add('scale-100');
+        }
+
+        function closeResultModal() {
+            const modal = document.getElementById('resultModal');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modal.children[0].classList.remove('scale-100');
+            modal.children[0].classList.add('scale-95');
+        }
+
+        function showConfirm(title, desc, onOk) {
+            document.getElementById('confirmTitle').innerText = title;
+            document.getElementById('confirmDesc').innerText = desc;
+            
+            const modal = document.getElementById('confirmModal');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+
+            const okBtn = document.getElementById('confirmOkBtn');
+            const cancelBtn = document.getElementById('confirmCancelBtn');
+
+            const closeConfirm = () => {
+                modal.classList.add('opacity-0', 'pointer-events-none');
+            };
+
+            okBtn.onclick = () => {
+                closeConfirm();
+                if (onOk) onOk();
+            };
+
+            cancelBtn.onclick = () => {
+                closeConfirm();
+            };
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
